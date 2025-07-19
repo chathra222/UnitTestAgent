@@ -1,0 +1,12 @@
+venv
+rest_client
+lambda/layer/python
+#any zip files
+*.zip
+.terraform
+terraform/.terraform.lock.hcl
+terraform.tfstate*
+#any auto.tfvars file
+*.auto.tfvars
+#any tfvars file
+*.tfvars

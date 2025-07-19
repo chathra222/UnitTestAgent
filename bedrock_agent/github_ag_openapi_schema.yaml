@@ -1,0 +1,198 @@
+openapi: 3.0.0
+info:
+  title: GitHub PR Automation Tool
+  version: 1.0.0
+  description: API to fetch file content, create branches, commit files, and create pull requests in GitHub repositories.
+
+paths:
+  /file-content:
+    get:
+      summary: Fetch file content from GitHub
+      description: Retrieve the content of a specific file from a GitHub repository and branch.
+      operationId: getFileContent
+      parameters:
+        - name: owner
+          in: query
+          required: true
+          schema:
+            type: string
+          description: GitHub repository owner
+        - name: repo
+          in: query
+          required: true
+          schema:
+            type: string
+          description: GitHub repository name
+        - name: branch
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Branch name (e.g., main)
+        - name: filepath
+          in: query
+          required: true
+          schema:
+            type: string
+          description: File path within the repository (e.g., users/views.py)
+      responses:
+        '200':
+          description: File content successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+  /create-branch:
+    post:
+      summary: Create a new branch in GitHub
+      description: Create a new branch from an existing base branch in a GitHub repository.
+      operationId: createBranch
+      parameters:
+        - name: owner
+          in: query
+          required: true
+          schema:
+            type: string
+          description: GitHub repository owner
+        - name: repo
+          in: query
+          required: true
+          schema:
+            type: string
+          description: GitHub repository name
+        - name: base
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The base branch name (e.g., main)
+        - name: new_branch
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The name of the new branch to be created
+      responses:
+        '201':
+          description: Branch successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Bad request or missing parameters
+        '500':
+          description: Internal server error
+
+  /file:
+    put:
+      summary: Commit a file to a GitHub repository branch
+      description: Add or update a file in a GitHub repository under a specific branch.
+      operationId: commitFile
+      parameters:
+        - name: owner
+          in: query
+          required: true
+          schema:
+            type: string
+          description: GitHub repository owner
+        - name: repo
+          in: query
+          required: true
+          schema:
+            type: string
+          description: GitHub repository name
+        - name: filepath
+          in: query
+          required: true
+          schema:
+            type: string
+          description: File path within the repository (e.g., users/views.py)
+        - name: content
+          in: query
+          required: true
+          schema:
+            type: string
+          description: File content (base64 encoded or plain text)
+        - name: branch
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Branch name (e.g., main)
+        - name: message
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Commit message
+      responses:
+        '200':
+          description: File successfully committed
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Missing required parameters
+        '500':
+          description: Failed to commit file
+
+  /create-pull-request:
+    post:
+      summary: Create a pull request on GitHub
+      description: Open a pull request from one branch to another in a GitHub repository.
+      operationId: createPullRequest
+      parameters:
+        - name: owner
+          in: query
+          required: true
+          schema:
+            type: string
+          description: GitHub repository owner
+        - name: repo
+          in: query
+          required: true
+          schema:
+            type: string
+          description: GitHub repository name
+        - name: title
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Pull request title
+        - name: body
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Pull request body
+        - name: head
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The name of the branch where your changes are implemented
+        - name: base
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The name of the branch you want the changes pulled into
+      responses:
+        '201':
+          description: Pull request successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Bad request or missing parameters
+        '500':
+          description: Internal server error
