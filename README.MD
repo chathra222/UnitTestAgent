@@ -8,24 +8,20 @@ This project showcases an automated CI/CD workflow where unit test cases are **g
 
 - Code Push: A developer pushes changes to a feature branch.
 
-- Webhook Triggered: GitHub triggers a webhook to an API Gateway.
+- Webhook Triggered: GitHub triggers a webhook calls webhook_handler.py Lambda function through API gateway
 
-- Lambda Filters Files: Lambda filters modified files that need tests.
+- webhook_handler.py lambda function does following tasks:
+   - Lambda Filters Files: Lambda filters modified files that need tests.
+   - Invoke Bedrock Agent: Lambda passes commit info and paths to the Bedrock Agent.
 
-- Invoke Bedrock Agent: Lambda passes commit info and paths to the Bedrock Agent.
+- Agent does following tasks:
 
-- Test Generation Workflow (within the Agent):
-
-- Fetches file content.
-
-- Generates Pytest test cases using LLM.
-
-- Creates a unit-tests branch based on the feature branch.
-
-- Commits the test files.
-
-- Opens a pull request.
-
+    - Fetches file content.
+    - Generates Pytest test cases using LLM.
+    - Creates a unit-tests branch based on the feature branch.
+    - Commits the test files.
+    - Opens a pull request.
+    
 - CI Pipeline: GitHub CI runs pytest on the new branch.
 
 - Review & Merge: Developer reviews the tests and merges the PR.
